@@ -1,0 +1,8 @@
+.vscode
+.idea
+tp/.vscode
+tp/.idea
+tp/*.o
+*.o
+
+
