@@ -1,11 +1,14 @@
-let pi : float = atan(1.0) *. 4.0;;
 
+
+(*Exercice 1*)
 let r = let x = 7 in 6 * x;;
 
 let a = (r - 6) / 6 - 6;;
 
 let u = let x = 9 in if (x < 9) then 9 / (x - x) else (x + x) / 9;;
 
+(*Exercice 2*)
+let pi : float = atan(1.0) *. 4.0;;
 let pi_sur_quatre = pi /. 4.0;;
 
 let dans_l_ordre = 1 < 2 && 2 < 3;;
@@ -13,6 +16,8 @@ let dans_l_ordre = 1 < 2 && 2 < 3;;
 let positif = let a = 42 in if a >=0 then true else false;;
 
 let double_absolu = let x = -2.7 in (if (x < 0.) then x else -.x) *. 2.0;;
+
+(*Exercice 3*)
 
 type semaine = Lundi | Mardi | Mercredi | Jeudi | Vendredi | Samedi | Dimanche;;
 
@@ -54,6 +59,7 @@ type special = Piocher of piocher_carte | Inverser | Passer;;
 type carte = Special of special | Couleur_nombre of couleur_nombre;;
 type list_carte = Nil | Cons of carte * list_carte;;
 
+(*Exercice 4 - Uno*)
 let carte1 = Couleur_nombre {couleur = Rouge; nombre = Zero};;
 let carte2 = Couleur_nombre {couleur = Vert; nombre = Un};;
 let carte3 = Couleur_nombre {couleur = Bleu; nombre = Deux};;
@@ -69,7 +75,7 @@ let rec length = fun l -> match l with
     | Nil -> 0
     | Cons (c, l) -> 1 + length l;;
 
-length main;;
+length main;;s
 
 let rec last_carte = fun l -> match l with
     | Nil -> failwith "Liste vide"
@@ -84,6 +90,7 @@ let first_carte = fun l -> match l with
 
 first_carte main;;
 
+(*Exercice 5 - Fonctions*)
 let cube = fun x -> x ** 3.;;
 cube 2.;;
 
@@ -104,6 +111,7 @@ sign_part 2;;
 sign_part (-2);;
 sign_part 0;;
 
+(*Exercice 6 - Fonction à plusieurs arguments*)
 let sum = fun x y -> x + y;;
 sum 2 3;;
 
@@ -113,6 +121,8 @@ sum 2 3 4;;
 let produit = fun x y z -> x *. y *. z;;
 produit 2. 3. 4.;;
 
+
+(*Exercice 7 - Prédicats*)
 let is_triplet_pythagoricien = fun a b c -> a * a + b * b = c * c || a * a + c * c = b * b || b * b + c * c = a * a;;
 is_triplet_pythagoricien 3 4 5;;
 is_triplet_pythagoricien 3 4 6;;
@@ -130,6 +140,7 @@ is_same_sign 2. 0.;;
 is_same_sign (-2.) 0.;;
 is_same_sign 0. 0.;;
 
+(*Exercice 9/10 - Minimum*)
 let min2 = fun x y -> if x < y then x else y;;
 min2 2 3;;
 min2 3 2;;
@@ -141,4 +152,49 @@ min 4 2 3;;
 min 4 3 2;;
 min 3 4 2;;
 min 3 2 4;;
+
+(*Exercice 11 - Point2D*)
+type point2D = {x : float; y : float};;
+type segment = {p1 : point2D; p2 : point2D};;
+
+let milieu = fun seg -> {x = ((seg.p1.x +. seg.p2.x) /. 2.); y = ((seg.p1.y +. seg.p2.y) /. 2.)};;
+
+let segment = let p1 : point2D = {x = 1.; y = 2.} in let p2 : point2D = {x = 21.; y = 12.} in let seg : segment = {p1 = p1; p2 = p2} in seg
+    
+let milieu_segment = milieu segment ;;
+
+let min = fun x y -> if (x < y) then x else y;;
+
+let max = fun x y -> if (x > y) then x else y;;
+
+let coeff_directeur = fun p1 p2 -> (p1.y -. p2.y) /. (p1.x -. p2.x) 
+
+let belong_to_line = fun seg point -> (coeff_directeur seg.p1 point) == (coeff_directeur seg.p2 point);;
+
+let in_or_out_segment = fun seg point -> (min seg.p1.x seg.p2.x) <= point.x && (max seg.p1.x seg.p2.x) >= point.x;;
+
+let belong_to_segment = fun seg point -> (belong_to_line seg point) && (in_or_out_segment seg point);;
+                                                                       
+let p1 : point2D = {x = 3.; y = 3.};;
+
+let p2 : point2D = {x = 6.; y = 14.};;
+
+coeff_directeur segment.p1 segment.p2;;
+coeff_directeur segment.p1 p1;;
+coeff_directeur segment.p2 p1;;
+coeff_directeur segment.p1 p2;;
+coeff_directeur segment.p2 p2;;
+
+
+
+belong_to_line segment p1;;
+belong_to_line segment p2;;
+
+in_or_out_segment segment p1;;
+in_or_out_segment segment p2;;
+
+belong_to_segment segment p1;;
+belong_to_segment segment p2;;
+
+
 
