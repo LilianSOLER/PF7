@@ -1,5 +1,7 @@
 
 
+
+
 (*Exercice 1*)
 let r = let x = 7 in 6 * x;;
 
@@ -75,7 +77,7 @@ let rec length = fun l -> match l with
     | Nil -> 0
     | Cons (c, l) -> 1 + length l;;
 
-length main;;s
+length main;;
 
 let rec last_carte = fun l -> match l with
     | Nil -> failwith "Liste vide"
