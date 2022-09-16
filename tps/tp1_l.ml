@@ -198,5 +198,57 @@ in_or_out_segment segment p2;;
 belong_to_segment segment p1;;
 belong_to_segment segment p2;;
 
+(*Exercice 12 - Jour semaine *) 
+
+let is_weekend = fun day -> if day = Samedi then true else (if day = Dimanche then true else false);;
+
+let day1 : semaine = Lundi;;
+let day2 : semaine = Dimanche;;
+is_weekend day1;;
+is_weekend day2;;
+
+(*Exercice 13 - Aires *)
+
+type carre = {cote: float};;
+type rectangle = {longueur: float; largeur: float};;
+type cercle = {radius: float};;
+
+type figure = Carre of carre | Rectangle of rectangle | Cercle of cercle;;
+
+let aire_carre = fun carre -> carre.cote *. carre.cote;;
+
+let aire_rectangle = fun rectangle -> rectangle.longueur *. rectangle.largeur;;
+
+let aire_cercle = fun cercle -> cercle.radius *. cercle.radius *. pi;;
+
+let aire = fun polygone -> match polygone with 
+  | Cercle c -> aire_cercle c
+  | Carre c -> aire_carre c
+  | Rectangle r -> aire_rectangle r;;
+
+let carre1 : figure = {cote = 2.5};;
+let carre2 : figure = {cote = 10.};;
+
+aire carre1;;
+aire carre2;;
+
+let rectangle1 : figure = {longueur = 5. ; largeur = 5.};;
+let rectangle2 : figure = {longueur = 5. ; largeur = 10.};;
+
+aire rectangle1;;
+aire rectangle2;;
+
+let cercle1 : figure = {radius = 2.0};;
+let cercle2 : figure = {radius = 4.0};;
+
+aire_cercle;;
+aire_cercle;;
+
+
+
+
+
+
+
 
 
