@@ -1,7 +1,7 @@
 (* TP 2 *)
 (* 2.1 - Fonctions simples sur un arbre *)
 
-type abin = Nil | Cons of abin * int * abin;; (* Nil ou fils_gauche * valeur * fils_droite *)
+type abin = Nil | Cons of abin * int * abin;; (* Create a new type called abin, which is either Nil or Cons of an abin, an int, and an abin. *)
 
 
 let abin1 = Cons(Nil, 10, Nil);;
@@ -95,12 +95,18 @@ let test_nombre_noeuds_really_binary4 = assert (nombre_noeuds_really_binary abin
 (* 2.2 - Arbre Binaire de Recherche *)
 let feuille = fun x -> Cons(Nil, x, Nil);; 
 
+type list_tree = Nil_tree | Cons_tree of abin * list_tree;;
+
 let abr0 = feuille 1;;
 let abr1 = Cons(abr0, 3, feuille 2);;
 let abr2 = Cons(abr1, 4, feuille 5);;
 let abr3 = Cons(feuille 7, 8, feuille 9);;
 let abr4 = Cons(abr3, 10, feuille 11)
 let abr5 = Cons(abr2, 6, abr4);;
+
+
+let list_tree = Cons_tree(abr5, Cons_tree(abr4, Cons_tree(abr3, Cons_tree(abr2, Cons_tree(abr1, Nil_tree)))));;
+
 
 let rec mem = fun abr e -> match abr with 
   | Nil -> false
@@ -116,7 +122,6 @@ let rec insert = fun abin e -> match abin with
   | Nil -> feuille e
   | Cons(a1, x, a2) -> if x < e then Cons(a1, x, insert a2 e) else Cons(insert a1 e, x, a2);;
 
-
 let abr1_insert = insert abr1 4;;
 let abr2_insert = insert abr2 13;;
 let abr3_insert = insert abr3 4;;
@@ -124,12 +129,15 @@ let abr4_insert = insert abr4 13;;
 let abr5_insert = insert abr5 8;;
 let abr5_insert_bis = insert abr5 12;;
 
-let rec display_arbre = fun abin -> match abin with 
-  | Nil -> print_char '_'
-  | Cons(a1, x, a2) -> print_int x;
-    print_newline();
-    display_arbre a1;
-    display_arbre a2;;
+let display_arbre = fun abin -> 
+  let rec display_arbre_aux = fun abin -> match abin with 
+    | Nil -> ""
+    | Cons(a1, x, a2) -> "(" ^ display_arbre_aux a1 ^ " " ^ string_of_int x ^ " " ^ display_arbre_aux a2 ^ ")" in
+  print_string (display_arbre_aux abin);;
+
+let rec display_arbre_list = fun list -> match list with 
+  | Cons_tree(a, list) -> display_arbre a; print_newline(); display_arbre_list list
+  | Nil_tree -> ();;
 
 display_arbre abr1;;
 display_arbre abr1_insert;;
@@ -144,11 +152,31 @@ display_arbre abr5;;
 display_arbre abr5_insert;;
 display_arbre abr5_insert_bis;;
 
+let return_tree_equilibre = fun abin -> 
+  let rec return_tree_equilibre_aux = fun abin -> match abin with 
+    | Nil -> Nil
+    | Cons(a1, x, a2) -> Cons(return_tree_equilibre_aux a1, x, return_tree_equilibre_aux a2) in
+  return_tree_equilibre_aux abin;;
+
+let rec return_list_tree_equilibre = fun list -> match list with
+  | Nil_tree -> Nil_tree
+  | Cons_tree(a, list) -> Cons_tree(return_tree_equilibre a, return_list_tree_equilibre list);;
+
+let return_list_tree_equilibre = return_list_tree_equilibre list_tree;;
+
+
+let test_display_arbre_list = display_arbre_list list_tree;;
+let test_return_list_tree_equilibre = display_arbre_list return_list_tree_equilibre;;
+
+(* 2.3 - Arbre Binaire de Recherche Equilibre *)
+
+
 
 
 
 
 (* Exercice 21 est le dernier à faire *)
+
 
 
 
