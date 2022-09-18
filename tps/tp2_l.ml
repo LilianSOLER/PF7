@@ -100,10 +100,10 @@ type abin_name = Cons_abin_name of abin * string;;
 type list_tree = Nil_tree | Cons_tree of abin_name * list_tree;;
 
 let abr0 = feuille 1;;
-let abr1 = Cons(abr0, 3, feuille 2);;
+let abr1 = Cons(abr0, 2, feuille 3);;
 let abr2 = Cons(abr1, 4, feuille 5);;
-let abr3 = Cons(feuille 7, 8, feuille 9);;
-let abr4 = Cons(abr3, 10, feuille 11)
+let abr3 = Cons(feuille 7, 9, feuille 10);;
+let abr4 = Cons(abr3, 11, feuille 12)
 let abr5 = Cons(abr2, 6, abr4);;
 
 let list_tree = Cons_tree(Cons_abin_name(abr5, "abr5"), Nil_tree);;
@@ -136,10 +136,10 @@ let rec insert = fun abin e -> match abin with
 
 let abr1_insert = insert abr1 4;;
 let abr2_insert = insert abr2 13;;
-let abr3_insert = insert abr3 4;;
+let abr3_insert = insert abr3 8;;
 let abr4_insert = insert abr4 13;;
 let abr5_insert = insert abr5 8;;
-let abr5_insert_bis = insert abr5 12;;
+let abr5_insert_bis = insert abr5 13;;
 
 let list_insert_tree =  Cons_tree(Cons_abin_name(abr5_insert_bis, "abr5_insert_bis"), Nil_tree);;
 let list_insert_tree = insert_in_list_tree abr1_insert "abr1_insert" list_insert_tree;;
@@ -162,6 +162,50 @@ let rec display_tree_list = fun list -> match list with
 let test_display_tree_list = display_tree_list list_tree;;
 let test_display_tree_list_insert = display_tree_list list_insert_tree;;
 
+let rec verif_abr = fun abin -> match abin with 
+  | Nil -> true
+  | Cons(Nil, x, Nil) -> true
+  | Cons(Nil, x, Cons(a1, y, a2)) -> if x < y then verif_abr (Cons(a1, y, a2)) else false
+  | Cons(Cons(a1, y, a2), x, Nil) -> if x > y then verif_abr (Cons(a1, y, a2)) else false
+  | Cons(Cons(a1, y, a2), x, Cons(a3, z, a4)) -> if x > y && x < z then verif_abr (Cons(a1, y, a2)) && verif_abr (Cons(a3, z, a4)) else false;;
+
+let test_verif_abr1 = assert (verif_abr abr1);;
+let test_verif_abr2 = assert (verif_abr abr2);;
+let test_verif_abr3 = assert (verif_abr abr3);;
+let test_verif_abr4 = assert (verif_abr abr4);;
+let test_verif_abr5 = assert (verif_abr abr5);;
+let test_verif_abr5_insert = assert (verif_abr abr5_insert);;
+let test_verif_abr5_insert_bis = assert (verif_abr abr5_insert_bis);;
+let test_verif_abr1_insert = assert (verif_abr abr1_insert);;
+
+type list = Nil_int | Cons_int of int * list;;
+
+let triAbr = fun list -> 
+  let rec triAbr_aux = fun list abin -> match list with 
+    | Nil_int -> abin
+    | Cons_int(x, list) -> triAbr_aux list (insert abin x) in 
+  triAbr_aux list Nil;;
+
+let triAbr1 = triAbr (Cons_int(1, Cons_int(2, Cons_int(3, Cons_int(4, Cons_int(5, Nil_int))))));;
+let triAbr2 = triAbr (Cons_int(5, Cons_int(4, Cons_int(3, Cons_int(2, Cons_int(1, Nil_int))))));;
+let triAbr3 = triAbr (Cons_int(1, Cons_int(3, Cons_int(5, Cons_int(2, Cons_int(4, Nil_int))))));;
+let triAbr4 = triAbr (Cons_int(5, Cons_int(3, Cons_int(1, Cons_int(4, Cons_int(2, Nil_int))))));;
+let triAbr5 = triAbr (Cons_int(2, Cons_int(4, Cons_int(1, Cons_int(3, Cons_int(5, Nil_int))))));;
+
+let test_triAbr = assert (verif_abr (triAbr (Cons_int(1, Cons_int(2, Cons_int(3, Cons_int(4, Cons_int(5, Cons_int(6, Cons_int(7, Cons_int(8, Cons_int(9, Cons_int(10, Nil_int)))))))))))));;
+let test_triAbr_bis = assert (verif_abr (triAbr (Cons_int(10, Cons_int(9, Cons_int(8, Cons_int(7, Cons_int(6, Cons_int(5, Cons_int(4, Cons_int(3, Cons_int(2, Cons_int(1, Nil_int)))))))))))));;
+let test_triAbr_ter = assert (verif_abr (triAbr (Cons_int(5, Cons_int(3, Cons_int(1, Cons_int(2, Cons_int(4, Cons_int(7, Cons_int(6, Cons_int(8, Nil_int)))))))))));;
+
+let abr_to_list = fun abin -> 
+  let rec abr_to_list_aux = fun abin list -> match abin with 
+    | Nil -> list
+    | Cons(a1, x, a2) -> abr_to_list_aux a1 (Cons_int(x, abr_to_list_aux a2 list)) in 
+  abr_to_list_aux abin Nil_int;;
+
+let test_abr_to_list = assert (abr_to_list (triAbr (Cons_int(1, Cons_int(2, Cons_int(3, Cons_int(4, Cons_int(5, Cons_int(6, Cons_int(7, Cons_int(8, Cons_int(9, Cons_int(10, Nil_int)))))))))))) = Cons_int(1, Cons_int(2, Cons_int(3, Cons_int(4, Cons_int(5, Cons_int(6, Cons_int(7, Cons_int(8, Cons_int(9, Cons_int(10, Nil_int)))))))))));;
+let abr_to_list1 = abr_to_list (triAbr (Cons_int(1, Cons_int(2, Cons_int(3, Cons_int(4, Cons_int(5, Cons_int(6, Cons_int(7, Cons_int(8, Cons_int(9, Cons_int(10, Nil_int)))))))))))) ;;
+let abr_to_list2 = abr_to_list (triAbr (Cons_int(10, Cons_int(9, Cons_int(8, Cons_int(7, Cons_int(6, Cons_int(5, Cons_int(4, Cons_int(3, Cons_int(2, Cons_int(1, Nil_int)))))))))))) ;;
+let abr_to_list3 = abr_to_list (triAbr (Cons_int(5, Cons_int(3, Cons_int(1, Cons_int(2, Cons_int(4, Cons_int(7, Cons_int(6, Cons_int(8, Nil_int))))))))));; 
 
 
 
