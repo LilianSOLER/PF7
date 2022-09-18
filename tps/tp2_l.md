@@ -120,3 +120,34 @@ let rec insert = fun abin e -> match abin with
   | Nil -> feuille e
   | Cons(a1, x, a2) -> if x < e then Cons(a1, x, insert a2 e) else Cons(insert a1 e, x, a2);;
 ```
+
+### **Bonus** - Pour faire nos test, nous avons trouvé utile de pouvoir afficher un abre. Écrire une fonction **display_tree** qui affiche un ABR donné.
+
+```ocaml
+let display_tree = fun abin ->
+  let rec display_tree_aux = fun abin tab -> match abin with 
+    | Nil -> ()
+    | Cons(a1, x, a2) -> display_tree_aux a2 (tab ^ "   "); print_string (tab ^ string_of_int x ^ "  "); print_newline(); display_tree_aux a1 (tab ^ "   ") in 
+  display_tree_aux abin "";;
+```
+- La sortie de la fonction est la suivante :
+
+    ```ocaml
+    display_tree abin;;
+              11  
+      10  
+            9  
+          8  
+                8  
+            7  
+    6  
+          5  
+      4  
+            2  
+          3  
+            1  
+    ```
+# ***Question*** : 
+   - On sent qu'elle peut être améliorée en prenant en compte la largeur de l'abre pour l'affichage (pour l'instant, on a un décalage fixe de 3 espaces). Comment faire ?
+  
+  - De plus, l'arbre est affiché de facon horizontale (on peut le voir sur la sortie de la fonction). Comment faire pour l'afficher de facon verticale ? (idée : matrice et transposition)

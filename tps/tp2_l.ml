@@ -93,9 +93,11 @@ let test_nombre_noeuds_really_binary3 = assert (nombre_noeuds_really_binary abin
 let test_nombre_noeuds_really_binary4 = assert (nombre_noeuds_really_binary abin4 = 4);;
 
 (* 2.2 - Arbre Binaire de Recherche *)
-let feuille = fun x -> Cons(Nil, x, Nil);; 
+let feuille = fun x -> Cons(Nil, x, Nil);;
 
-type list_tree = Nil_tree | Cons_tree of abin * list_tree;;
+type abin_name = Cons_abin_name of abin * string;;
+
+type list_tree = Nil_tree | Cons_tree of abin_name * list_tree;;
 
 let abr0 = feuille 1;;
 let abr1 = Cons(abr0, 3, feuille 2);;
@@ -104,8 +106,18 @@ let abr3 = Cons(feuille 7, 8, feuille 9);;
 let abr4 = Cons(abr3, 10, feuille 11)
 let abr5 = Cons(abr2, 6, abr4);;
 
+let list_tree = Cons_tree(Cons_abin_name(abr5, "abr5"), Nil_tree);;
 
-let list_tree = Cons_tree(abr5, Cons_tree(abr4, Cons_tree(abr3, Cons_tree(abr2, Cons_tree(abr1, Nil_tree)))));;
+
+let rec insert_in_list_tree = fun abin name l ->  match l with
+  | Nil_tree -> Cons_tree(Cons_abin_name(abin, name), Nil_tree)
+  | Cons_tree(a, l) -> Cons_tree(a, insert_in_list_tree abin name l);;
+
+let list_tree = insert_in_list_tree abr0 "abr0" list_tree;;
+let list_tree = insert_in_list_tree abr1 "abr1" list_tree;;
+let list_tree = insert_in_list_tree abr2 "abr2" list_tree;;
+let list_tree = insert_in_list_tree abr3 "abr3" list_tree;;
+let list_tree = insert_in_list_tree abr4 "abr4" list_tree;;
 
 
 let rec mem = fun abr e -> match abr with 
@@ -129,46 +141,28 @@ let abr4_insert = insert abr4 13;;
 let abr5_insert = insert abr5 8;;
 let abr5_insert_bis = insert abr5 12;;
 
-let display_arbre = fun abin -> 
-  let rec display_arbre_aux = fun abin -> match abin with 
-    | Nil -> ""
-    | Cons(a1, x, a2) -> "(" ^ display_arbre_aux a1 ^ " " ^ string_of_int x ^ " " ^ display_arbre_aux a2 ^ ")" in
-  print_string (display_arbre_aux abin);;
+let list_insert_tree =  Cons_tree(Cons_abin_name(abr5_insert_bis, "abr5_insert_bis"), Nil_tree);;
+let list_insert_tree = insert_in_list_tree abr1_insert "abr1_insert" list_insert_tree;;
+let list_insert_tree = insert_in_list_tree abr2_insert "abr2_insert" list_insert_tree;;
+let list_insert_tree = insert_in_list_tree abr3_insert "abr3_insert" list_insert_tree;;
+let list_insert_tree = insert_in_list_tree abr4_insert "abr4_insert" list_insert_tree;;
+let list_insert_tree = insert_in_list_tree abr5_insert "abr5_insert" list_insert_tree;;
 
-let rec display_arbre_list = fun list -> match list with 
-  | Cons_tree(a, list) -> display_arbre a; print_newline(); display_arbre_list list
+
+let display_tree = fun abin ->
+  let rec display_tree_aux = fun abin tab -> match abin with 
+    | Nil -> ()
+    | Cons(a1, x, a2) -> display_tree_aux a2 (tab ^ "   "); print_string (tab ^ string_of_int x ^ "  "); print_newline(); display_tree_aux a1 (tab ^ "   ") in 
+  display_tree_aux abin "";;
+
+let rec display_tree_list = fun list -> match list with 
+  | Cons_tree(Cons_abin_name(a, name), list) -> print_string (name ^ ":"); print_newline();display_tree a; print_newline();print_newline(); display_tree_list list
   | Nil_tree -> ();;
 
-display_arbre abr1;;
-display_arbre abr1_insert;;
-display_arbre abr2;;
-display_arbre abr2_insert;;display_arbre abr1;;
-display_arbre abr2_insert;;
-display_arbre abr3;;
-display_arbre abr3_insert;;
-display_arbre abr4;;
-display_arbre abr4_insert;;
-display_arbre abr5;;
-display_arbre abr5_insert;;
-display_arbre abr5_insert_bis;;
-
-let return_tree_equilibre = fun abin -> 
-  let rec return_tree_equilibre_aux = fun abin -> match abin with 
-    | Nil -> Nil
-    | Cons(a1, x, a2) -> Cons(return_tree_equilibre_aux a1, x, return_tree_equilibre_aux a2) in
-  return_tree_equilibre_aux abin;;
-
-let rec return_list_tree_equilibre = fun list -> match list with
-  | Nil_tree -> Nil_tree
-  | Cons_tree(a, list) -> Cons_tree(return_tree_equilibre a, return_list_tree_equilibre list);;
-
-let return_list_tree_equilibre = return_list_tree_equilibre list_tree;;
+let test_display_tree_list = display_tree_list list_tree;;
+let test_display_tree_list_insert = display_tree_list list_insert_tree;;
 
 
-let test_display_arbre_list = display_arbre_list list_tree;;
-let test_return_list_tree_equilibre = display_arbre_list return_list_tree_equilibre;;
-
-(* 2.3 - Arbre Binaire de Recherche Equilibre *)
 
 
 
