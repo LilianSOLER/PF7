@@ -3,7 +3,7 @@
 
 type abin = Nil | Cons of abin * int * abin;; (* Create a new type called abin, which is either Nil or Cons of an abin, an int, and an abin. *)
 
-
+(*create 4 tree*)
 let abin1 = Cons(Nil, 10, Nil);;
 let abin2 = Cons(abin1, 12, abin1);;
 let abin3 = Cons(abin2, 14, abin1);;
