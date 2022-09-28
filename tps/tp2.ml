@@ -1,4 +1,4 @@
-(* TP 2 *)
+(* TP 2 - Benjamin Bracquier + Lilian Soler *)
 (* 2.1 - Fonctions simples sur un arbre *)
 
 type abin = Nil | Cons of abin * int * abin;; (* Create a new type called abin, which is either Nil or Cons of an abin, an int, and an abin. *)

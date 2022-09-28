@@ -1,4 +1,4 @@
-# TP2 : ARBRES BINAIRES
+# TP2 : ARBRES BINAIRES - Benjamin Bracquier + Lilian Soler
 
 
 Il est demandé, pour ce TP et ceux qui vendront ensuite, de faire suivre chaque définition de fonction
