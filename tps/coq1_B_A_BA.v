@@ -181,6 +181,9 @@ Section sec_cas.
     - reflexivity.
   Qed.
 
+  Print Vert.
+  Print th3_coul_suiv.
+
 End sec_cas.
 
 (** ** Raisonnement universel : tactique intro *)
@@ -230,15 +233,19 @@ Qed.
 
 Section sec_variante_th_crou_gen.
   Variable c : coulfeu.
+  Hypothesis crou : c = Rouge.
   Theorem th_crou_demi_gen : c = Rouge -> coul_suiv c = Vert.
   Proof.
+    rewrite crou.
+    cbn [coul_suiv].
+    reflexivity.
+  Qed.
     (** à compléter *)
 
 
   (* Quand une démonstration est incomplète, on peut passer à la suite
    * à l'aide de Admitted  au lieu de Qed.
    * Ne pas oublier de remplacer Admitted par Qed quand on a réussi ! *)
-  Admitted.
 
 End sec_variante_th_crou_gen.
 
@@ -246,9 +253,13 @@ End sec_variante_th_crou_gen.
 
 Lemma suivsuivsuiv_id : forall c:coulfeu, coul_suiv (coul_suiv (coul_suiv c))=c.
 Proof.
+  intros c.
+  destruct c as [ (*Vert*) | (*Orange*) | (*Rouge*) ].
+  - cbn [coul_suiv]. reflexivity.
+  - cbn [coul_suiv]. reflexivity.
+  - cbn [coul_suiv]. reflexivity.
+Qed.
 (** à compléter ici *)
-
-Admitted.
 
 (** ** Type inductif et récurrence structurelle : arbres binaires tricolores *)
 
@@ -295,12 +306,8 @@ Proof.
   induction a as [ (* F *) c
                  | (* N *) a1 Hrec_a1 a2 Hrec_a2 ].
   - cbn [renva]. reflexivity.
-  - cbn [renva].
+  - cbn [renva]. rewrite Hrec_a2. rewrite Hrec_a1. reflexivity.
     (* à compléter *)
-
-
-
-
-Admitted.
+Qed.
 
 (** Fin du travail à faire à la maison. *)
