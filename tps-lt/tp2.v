@@ -1,4 +1,5 @@
 (** INITIATION A LΑ RÉCURRENCE EN COQ *)
+(* TP 2 - Benjamin Bracquier + Lilian Soler *)
 
 (*
 Le TD est destiné à exprimer en Coq la preuve par récurrence

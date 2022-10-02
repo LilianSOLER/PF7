@@ -1,5 +1,7 @@
 (** * INITIATION A COQ *)
 
+(* TP 2 - Lilian Soler *)
+
 (**
 Le début de ce fichier a été présenté en cours.
 Il est demandé de le réviser à la maison et de le terminer
