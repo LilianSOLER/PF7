@@ -20,17 +20,19 @@ le raisonnement formalisé en Coq, soit avant, soit a posteriori.
     et on nommera les différents constructeurs/opérateurs
     Cst (pour les naturels), Apl et Amu pour l'addition et la multiplication *)
 
-    Inductive aexp : Set :=
+    Inductive aexp : Set := 
+    | Cst : nat -> aexp 
+    | Apl : aexp -> aexp -> aexp 
+    | Asub : aexp -> aexp -> aexp
+    | Amu : aexp -> aexp -> aexp.
     (* à compléter *)
-    .
     
     (* Définir les expressions aexp correspondant à
       (1 + 2) * 3 et  (1 * 2) + 3
      *)
     
-    Definition exp_1 := (* à compléter *)
-    
-    Definition exp_2 := (* à compléter *)
+    Definition exp_1 :=  Amu (Apl (Cst 1)  (Cst 2)) (Cst 3).
+    Definition exp_2 := Apl (Amu (Cst 1) (Cst 2)) (Cst 3).
     
     (** Définir en Coq la fonction d'évaluation sémantique fonctionnelle Sf de aexp
         en utilisant les operateurs arithmétiques de Coq sur le type nat : + *       *)
@@ -38,12 +40,19 @@ le raisonnement formalisé en Coq, soit avant, soit a posteriori.
     Fixpoint eval (a: aexp) : nat :=
       match a with
       | Cst n => n
-      (* à compléter *)
+      | Apl a1 a2 => (eval a1) + (eval a2)
+      | Asub a1 a2 => (eval a1) - (eval a2)
+      | Amu a1 a2 => (eval a1) * (eval a2)
       end.
+      (* à compléter *)
     
     (** Evaluer avec Eval ou Compute la sémantique de exp_1 et exp_2 *)
     
-    (* à compléter *)
+    Check (eval exp_1).
+    Check (eval exp_2).
+
+    Compute (eval exp_1).
+    Compute (eval exp_2).
     
     (** Nombre de feuilles *)
     
@@ -53,7 +62,10 @@ le raisonnement formalisé en Coq, soit avant, soit a posteriori.
     
     Fixpoint nbf (a:aexp) :=
       match a with
-      (* à compléter *)
+        | Cst n => 1
+        | Apl a1 a2 => (nbf a1) + (nbf a2)
+        | Asub a1 a2 => (nbf a1) + (nbf a2)
+        | Amu a1 a2 => (nbf a1) + (nbf a2)
       end.
     
     (** ** Raisonnement par cas sur un AST *)
@@ -67,7 +79,10 @@ le raisonnement formalisé en Coq, soit avant, soit a posteriori.
     
     Definition categorise (a:aexp) :=
       match a with
-      (* à compléter *)
+        | Cst n => Cst 1
+        | Apl a1 a2 => Cst 2
+        | Asub a1 a2 => Cst 2
+        | Amu a1 a2 => Cst 3
       end.
     
     (** Démontrer que le résultat de la fonction précédente
@@ -77,9 +92,12 @@ le raisonnement formalisé en Coq, soit avant, soit a posteriori.
     
     Lemma nbf_cat : forall a, nbf (categorise a) = 1.
     Proof.
-    (* à compléter *)
-    
-    Admitted.
+      destruct a as [ (*Cst*) | (*Apl*) | (*Asub*) | (*Amu*)].
+    - cbn [categorise]. cbn[nbf] . reflexivity.
+    - cbn [categorise]. cbn[nbf] . reflexivity.
+    - cbn [categorise]. cbn[nbf] . reflexivity.
+    - cbn [categorise]. cbn[nbf] . reflexivity.
+    Qed.
     
     (** Nombre d'opérateurs *)
     
@@ -89,7 +107,8 @@ le raisonnement formalisé en Coq, soit avant, soit a posteriori.
     
     Fixpoint nbo (a:aexp) :=
       match a with
-      (* à compléter *)
+        | Cst n => 0
+        | Apl a1 a2 | Asub a1 a2 | Amu a1 a2 => nbo a1 + nbo a2 + 1
       end.
     
     (** Démontrer la relation entre nbf et nbo par récurrence structurelle *)
@@ -104,7 +123,10 @@ le raisonnement formalisé en Coq, soit avant, soit a posteriori.
       intro a.
       induction a as [ (*Cst*) n
                      | (*Apl*) e1 Hrec_e1 e2 Hrec_e2
-                     | (*Amu*) e1 Hrec_e1 e2 Hrec_e2 ].
+                     | (*Amu*) e1 Hrec_e1 e2 Hrec_e2
+                     | (*Asub*) e1 Hrec_e1 e2 Hrec_e2 ].
+        - reflexivity.
+        - cbn [nbo nbf]. rewrite Hrec_e1. rewrite Hrec_e2. rewrite add_assoc. 
     
       (* à compléter *)
     Admitted.
@@ -118,19 +140,32 @@ le raisonnement formalisé en Coq, soit avant, soit a posteriori.
      *)
     
     Fixpoint transform (a:aexp) :=
-      (* à compléter *)
+      match a with
+        | Cst n => Cst 1
+        | Apl a1 a2 | Asub a1 a2 | Amu a1 a2 => Apl (transform a1) (transform a2)
+      end.
     
     (** Évaluer la fonction transform sur les expressions exp_1 et exp_2 *)
     
-    (* à compléter *)
-    
+    Compute (transform exp_1).
+    Compute (transform exp_2).
+  
     (** Montrer maintenant que l'évaluation de transform e donne le nombre
      * de feuilles de e (nbf e). *)
     
     Lemma eval_transform_nbf : forall a, eval (transform a) = nbf a.
+    
     Proof.
-      (* à compléter *)
-    Admitted.
+      intro a.
+      induction a as [ (*Cst*) n
+                     | (*Apl*) e1 Hrec_e1 e2 Hrec_e2
+                     | (*Amu*) e1 Hrec_e1 e2 Hrec_e2
+                     | (*Asub*) e1 Hrec_e1 e2 Hrec_e2 ].
+        - reflexivity.
+        - cbn [transform eval nbf]. rewrite Hrec_e1. rewrite Hrec_e2. reflexivity.
+        - cbn [transform eval nbf]. rewrite Hrec_e1. rewrite Hrec_e2. reflexivity.
+        - cbn [transform eval nbf]. rewrite Hrec_e1. rewrite Hrec_e2. reflexivity.
+    Qed.
     
     (** Simplification d'expressions *)
     
@@ -138,8 +173,14 @@ le raisonnement formalisé en Coq, soit avant, soit a posteriori.
     
     Definition simpl0 (a:aexp) :=
       match a with
-      (* à compléter *)
-      (* fin de zone à compléter *)
+      | Cst n => Cst n
+      | Apl (Cst 0) e => e
+      | Apl e (Cst 0) => e
+      | Amu (Cst 1) e => e
+      | Amu e (Cst 1) => e
+      | Amu (Cst 0) e => Cst 0
+      | Amu e (Cst 0) => Cst 0
+      | Asub e (Cst 0) => e
       | _ => a
       end.
     
