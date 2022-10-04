@@ -119,7 +119,7 @@ le raisonnement formalisé en Coq, soit avant, soit a posteriori.
     Require Import Arith. Import Nat.
     Check add_assoc.
     
-    Lemma nbf_nbo_plus_1: forall a:aexp, nbf a = nbo a + 1.
+    Lemma nbf_nbo_plus_1: forall a:aexp, nbf a = 1 + nbo a.
     Proof.
       intro a.
       induction a as [ (*Cst*) n
@@ -127,10 +127,10 @@ le raisonnement formalisé en Coq, soit avant, soit a posteriori.
                      | (*Amu*) e1 Hrec_e1 e2 Hrec_e2
                      | (*Asub*) e1 Hrec_e1 e2 Hrec_e2 ].
         - reflexivity.
-        - cbn [nbo nbf]. rewrite Hrec_e1. rewrite Hrec_e2. rewrite add_assoc. 
-    
-      (* à compléter *)
-    Admitted.
+        - cbn [nbo nbf]. rewrite Hrec_e1. rewrite Hrec_e2. rewrite add_assoc. rewrite add_1_r. rewrite add_assoc. rewrite add_1_r. reflexivity.
+        - cbn [nbo nbf]. rewrite Hrec_e1. rewrite Hrec_e2. rewrite add_assoc. rewrite add_1_r. rewrite add_assoc. rewrite add_1_r. reflexivity.
+        - cbn [nbo nbf]. rewrite Hrec_e1. rewrite Hrec_e2. rewrite add_assoc. rewrite add_1_r. rewrite add_assoc. rewrite add_1_r. reflexivity.
+    Qed.
     
     (** Transformation d'expressions *)
     
