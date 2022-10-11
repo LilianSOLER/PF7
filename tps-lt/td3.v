@@ -266,6 +266,10 @@ Inductive aexp :=
  (1 + x2) * 3 et  (x1 * 2) + x3
 *)
 
+Definition a1 : aexp := Amu (Apl (Aco 1) (Ava 2)) (Aco 3).
+Definition a2 : aexp := Apl (Amu (Ava 1) (Aco 2)) (Ava 3).
+
+
 
 (** Pour évaluer une expression représentée par un tel AST,
    on considère un *état*, c'est à dire une association entre
