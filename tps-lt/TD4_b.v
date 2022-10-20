@@ -1,3 +1,5 @@
+(*Benjamin Bracquier avec Lilian Soler*)
+
 (**
 Trois objectifs dans ce TD :
 - Raisonner avec apply ... pour utiliser
