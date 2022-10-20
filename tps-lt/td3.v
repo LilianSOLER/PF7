@@ -1,3 +1,5 @@
+(*SOLER Lilian - INFO 4 - TD + 1h*)
+
 (**
 Deux objectifs dans ce TD :
 - deux structures linéaires qui serviront constamment,
@@ -296,7 +298,14 @@ Inductive state :=
 
 (** Définir une fonction [get] qui rend la valeur associée à xi dans l'état s *)
 
-Fixpoint get (i: nat) (s: state) : nat. Admitted.
+Fixpoint get (i: nat) (s: state) : nat :=
+   match S, i with
+      | Nil, _ => 0
+      | Cons n s', O => n
+      | Cons n s', S i' => get i' s'
+   end.
+
+(** Définir une fonction [set] qui associe la valeur n à xi dans l'état s *)
 
 (** FIN QUESTIONS FACULTATIVES (3) *)
 (* ----------------------------------------------------------------------- *)
