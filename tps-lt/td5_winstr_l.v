@@ -127,14 +127,7 @@ Fixpoint eqnatb n1 n2 : bool :=
     suffisamment de 0 (valeur par défaut).
  *)
 Fixpoint update (i:nat) (v:nat) (s:state) : state :=
-  match s with
-  | [] => v :: 0
-  | v' :: s' =>
-    match i with
-    | O => v :: s'
-    | S i' => v' :: update i' v s'
-    end
-  end.
+  match s 
 
 
 
