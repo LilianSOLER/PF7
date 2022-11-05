@@ -91,3 +91,18 @@ let rec sommechiffres : int ranalist =
 
 
 let truc4=sommechiffres truc2;;
+
+(*4*)
+
+
+
+(*Exercice 8.3 du poly de TD *)
+(*1*)
+(*pas sur de ces types*)
+type joueur = Noir | Blanc;;
+type longueur = Longueur of int;;
+type largeur = Largeur of int ;;
+type partie = {longueur:longueur;largeur:largeur};;
+type coup ={joueur: joueur;couplongueur:longueur;couplargeur:largeur};;
+
+(*2*)
