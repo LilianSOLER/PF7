@@ -97,12 +97,102 @@ let truc4=sommechiffres truc2;;
 
 
 (*Exercice 8.3 du poly de TD *)
+
+(*
+P ::= noir | blanc
+C ::= ( P int int )
+Cl ::= ε | C Cl
+S ::= ( int int ) Cl
+           *)
+
 (*1*)
-(*pas sur de ces types*)
+(*type*)
+(*2 joueur*)
 type joueur = Noir | Blanc;;
-type longueur = Longueur of int;;
-type largeur = Largeur of int ;;
-type partie = {longueur:longueur;largeur:largeur};;
-type coup ={joueur: joueur;couplongueur:longueur;couplargeur:largeur};;
+(*correspond à C=joueur et ou est le coup *)
+type coup = joueur * int * int;;
+(*correspond à la dimension du plateau et la liste de tous les coups*)
+type partie = int * int * coup list;;
 
 (*2*)
+(*dans ce type,on doit avoir tous les symbole qui peuvent apparaitre*)
+type token =
+  | ParG (* parenthèse gauche *)
+  | ParD (* parenthèse droite *)
+  | Blanc(*quand il y a blanc et noir*)
+  | Noir
+  | Int of int (*chiffres*)
+
+
+(*reconnaitre le token noir*)
+let p_noir = fun l ->
+    match l with
+    | 'n' :: 'o' :: 'i' :: 'r' :: apres -> (Noir, apres)
+    | _ -> raise Echec;;
+(*reconnaitre le token blanc*)
+let p_blanc = fun l ->
+    match l with
+    | 'b' :: 'l' :: 'a' :: 'n' :: 'c' :: apres -> (Blanc, apres)
+    | _ -> raise Echec;;
+(*reconnaitre le token parenthese droite*)
+let p_parouv = fun l -> match l with
+  | '(' :: apres -> (ParG,apres)
+  | _ -> raise Echec;;
+(*reconnaitre le token parenthese gauche*)
+let p_parfer = fun l -> match l with
+  | ')' :: apres -> (ParD,apres)
+  | _ -> raise Echec;;
+
+(*reconnaitre chaque chiffre*)
+let parse_int = function
+  | [] -> raise Echec
+  | '0' :: xs -> (0, xs)
+  | '1' :: xs -> (1, xs)
+  | '2' :: xs -> (2, xs)
+  | '3' :: xs -> (3, xs)
+  | '4' :: xs -> (4, xs)
+  | '5' :: xs -> (5, xs)
+  | '6' :: xs -> (6, xs)
+  | '7' :: xs -> (7, xs)
+  | '8' :: xs -> (8, xs)
+  | _ :: xs -> (9, xs);;
+
+(*reconnaitre le token chiffres avec parse_int *)
+let p_int  = fun l ->
+  let (i, suite) = parse_int l in
+    Int i;;
+
+(*rend le token en tete donc on passe par toutes les symboles possibles *)
+let token_here = fun l ->
+    try
+        p_parouv l
+    with Echec -> try
+        p_parfer l
+    with Echec -> try
+        p_blanc l
+    with Echec -> try
+        p_noir l
+    with Echec ->
+        let (i, suite) = parse_int l in
+        (Int i, suite);;
+
+(*enleve les espaces*)
+let rec espace = fun l ->
+    match l with
+    | ' ' :: apres -> espace apres
+    | _ -> l;;
+
+(*rend le 1er token en passant les espaces*)
+let next_token = fun l ->
+  token_here (espace l);;
+
+(*retourne tout les tokens*)
+let rec tokens = fun l ->
+    if l = [] then
+        []
+    else
+        let (token, suite) = next_token l in
+        token :: (tokens suite);;
+
+
+(*3*)
