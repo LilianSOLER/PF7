@@ -94,6 +94,14 @@ let truc4=sommechiffres truc2;;
 
 (*4*)
 
+let rec (horner : int -> int ranalist) =
+  fun a l  ->
+  try au_moins_un a l with Echec -> aucun a l 
+and au_moins_un : int -> int ranalist = fun a l ->
+  let x, l = un_chiffre l in
+  let n, l = horner  (a*10 +x) l  in
+  n, l
+and aucun : int ->int ranalist = fun a l ->epsilon_res a l
 
 
 (*Exercice 8.3 du poly de TD *)
