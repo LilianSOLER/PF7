@@ -1,3 +1,4 @@
+(*Benjamin Bracquier et Lilian Soler*)
 (**
 Objectif de ce suppport de TD :
 familiarisation avec les AST winstr pour le langage WHILE.
