@@ -1,0 +1,94 @@
+(* Consigne gÃ©nÃ©rale : remplacer les
+              raise (TODO "...")
+   par votre code.
+   PrÃ© et post-condition : ce fichier compile sans erreur *)
+
+let prenom: string = "XXX"
+let nom: string = "XXX"
+
+exception TODO of string
+
+
+type arbint = F | N of arbint * int * arbint
+type file_d_entiers = int list
+
+(*
+                        N
+                     /  |  \
+                   N    4    N
+                 / | \     / | \
+                F  1  F   F  6  F
+*)
+
+(* DÃ©finir en OCaml la valeur de l'arbre ci-dessus *)
+let arbre1 = F (* TODO *)
+
+(* decomposition d'une file d'entiers en
+- soit le vide
+- soit la file des premiers Ã©lÃ©ments et le dernier
+ *)
+type decomp = Aucun | Elts of file_d_entiers * int
+
+(* L'interface est alors plus simple (pas besoin d'exception) :
+val  file_vide : file_d_entiers
+val enfile : int -> file_d_entiers -> file_d_entiers
+val defile : file_d_entiers -> decomp
+ *)
+
+(* Algorithmes quand on enfile en fin de liste et on dÃ©file en dÃ©but de liste *)
+let file_vide : file_d_entiers = []
+let enfile : int -> file_d_entiers -> file_d_entiers =
+  fun x f -> f @ (x :: [])
+let defile : file_d_entiers -> decomp =
+  fun f ->
+  match f with
+  | [] -> Aucun
+  | x :: u -> Elts (u, x)
+
+let est_de_complexite_lineaire_enfile : unit -> bool = fun () -> raise (TODO "est_de_complexite_lineaire_enfile")
+let est_de_complexite_lineaire_defile : unit -> bool = fun () -> raise (TODO "est_de_complexite_lineaire_defile")
+
+(* Comme pour enfile, mais on enfile une liste d'entiers au lieu d'un seul entier,
+   dans une file existante *)
+(* Les Ã©lÃ©ments de la liste sont enfilÃ©s en commenÃ§ant par la tÃªte de liste.
+   Par exemple si la liste est [1; 4; 6], les Ã©lÃ©ments Ã  enfiler sont dans l'ordre
+   1 puis 4 puis 6. *)
+let rec enfiliste : int list -> file_d_entiers -> file_d_entiers =
+  fun u f -> raise (TODO "enfiliste")
+
+(* Comme pour enfile, mais on enfile un arbre d'entiers au lieu d'un seul entier,
+   dans une file existante *)
+(* Les Ã©lÃ©ments de l'arbre sont enfilÃ©s en commenÃ§ant par la gauche
+   Par exemple si l'arbre est arbre1 (ci-dessus), les Ã©lÃ©ments Ã  enfiler sont dans l'ordre
+   1 puis 4 puis 6. *)
+let rec enfilarb_gauche : arbint -> file_d_entiers -> file_d_entiers =
+  fun a f ->
+  raise (TODO "enfilarb_gauche")
+
+(* Pour tester *)
+let test () = enfilarb_gauche arbre1 file_vide
+
+(* La fonction defilarb defile la file en entrÃ©e en un arbre binaire
+   de sorte que le premier Ã©lÃ©ment sera Ã  la racine, tandis que le dernier
+   sera "en bas Ã  gauche", exemple :
+   si les Ã©lÃ©ments dÃ©filÃ©s sont successivement 1, 4 et 6, l'arbre sera
+
+                            N
+                          / | \
+                        N   1  F
+                      / | \
+                    N   4  F
+                  / | \
+                 F  6  F
+
+*)
+let rec defilarb : file_d_entiers -> arbint =
+  fun f ->
+  raise (TODO "defilarb")
+
+let arb146 () = defilarb (enfiliste (1 :: 4 :: 6 :: []) file_vide)
+
+
+(* Donner le type d'un arbre polymorphe qui gÃ©nÃ©ralise arbint *)
+
+type 'a arb = 'a (* a finir *)

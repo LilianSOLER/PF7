@@ -1,0 +1,31 @@
+(* Consigne générale : remplacer les
+              raise (TODO "...")
+   par votre code. Ne changer pas le nom des fonctions.
+
+  Pré et post-condition : ce fichier compile sans erreur
+
+   Il y a 3 types de questions (dans l'ordre d'apparition) :
+   - des questions [**] que vous devriez réussir si vous avez fait et compris le projet sans les extensions
+   - des questions [***] qui concernent les extensions facultatives
+   - des questions [*] que vous n'avez pas besoin de traiter si vous avec réussi au moins 2
+     des questions mieux étoilées
+
+   Il n'est pas nécessaire de traiter plus de 2 questions à [**] ou [***] pour obtenir une note satisfaisante
+   ni de traiter toutes les questions pour obtenir la note maximale.    
+   *)
+
+let prenom: string = "XXX"
+let nom: string = "XXX"
+    
+(*  Vous  pouvez  utilisez  l'exception PRESQUE  si  vous  avez  un
+   programme qui  marche presque.  Si  une telle exception  est levée,
+   nous irons lire votre code pour voir s'il mérite quelques points.
+
+    ex  :
+    let incr x =
+       (* x+2  *)
+      raise (PRESQUE "mon incrémenteur incrémente, mais de 2 au lieu de 1, et je ne trouve pas mon erreur")
+
+    *) 
+exception PRESQUE of string
+exception TODO of string

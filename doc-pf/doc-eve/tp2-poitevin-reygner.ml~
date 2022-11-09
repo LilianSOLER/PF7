@@ -1,0 +1,21 @@
+(*POITEVIN Eve & REYGNER Etienne*)
+
+(*2.1*)
+
+type abin =
+  | F
+  | N of abin*int*abin;;
+
+let arbre = N (N (F, 2, N (F, 4, F)), 1, F);;
+
+let rec nbN : abin -> int =
+  fun a -> match a with
+           | F -> 0
+           | N(g, n, d) -> nbN(g) + 1 + nbN(d);;
+
+nbN arbre;;
+
+let rec hauteur : abin -> int =
+  fun a -> match a with
+           | F -> 0
+           

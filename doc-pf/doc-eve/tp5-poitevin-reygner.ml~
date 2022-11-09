@@ -1,0 +1,156 @@
+(* POITEVIN Eve & REYGNER Etienne *)
+
+
+(* FILES *)
+
+(* Exercice 59 *)
+
+type 'a file = 'a list;;
+
+let file_vide : 'a file = [];;
+
+let est_file_vide : ('a file -> bool) = fun f ->
+  match f with
+  | [] -> true
+  | _ -> false;;
+
+est_file_vide file_vide;;
+est_file_vide [1, 2, 3];;
+
+let enfile : ('a -> 'a file -> 'a file) = fun x f -> [x] @ f ;;
+
+let i = enfile 1 file_vide;;
+let i = enfile 2 i;;
+
+exception Pas_de_dernier;;
+
+let rec reste_file : ('a file -> 'a file) = fun f ->
+  match f with
+  | [] -> raise Pas_de_dernier
+  | x :: f' -> if f'=[] then f' else x::(reste_file f');;
+
+let rec last : ('a file -> 'a) = fun f ->
+  match f with
+  | [] -> raise Pas_de_dernier
+  | x :: [] -> x
+  | x :: f' -> last f';;
+
+last i;;
+
+reste_file i;;
+
+let defile : ('a file -> ('a * 'a file)) = fun f -> (last f, reste_file f);;
+
+defile i;;
+
+(* Exercice 60 *)
+
+let rec enfileList = fun l f ->
+	match l with
+		| [] -> f
+		| x::l' -> enfileList l' (enfile x f);;
+
+
+let fv = file_vide;;
+
+let l1 = 1::2::3::[];;
+
+let r = enfileList l1 fv;;
+
+let rec defileFile = fun f -> 
+	match f with
+		| [] -> []
+		| x::f' -> x::(defileFile f');;
+
+defileFile r;;
+
+let rec renv = fun l -> match l with
+                        | [] -> []
+                        | x::l' -> renv l' @ (x::[]);;
+
+let rec teste_file : ('a list -> bool) = fun l ->
+  let file = enfileList l [] in let list = defileFile file in l = renv list;;
+
+teste_file l1;;
+
+(* Exercice 61 *)
+
+type 'a file_bis = 'a list * 'a list;;
+
+let rec est_file_vide_bis = fun f ->
+   match f with
+  | ([], []) -> true
+  | (_,_) -> false;;
+
+est_file_vide_bis ([], []);;
+
+est_file_vide_bis ([], [4]);;
+
+let enfile_bis : ('a -> 'a file_bis -> 'a file_bis) = fun x f -> let (l, r) = f in x::l,r;;
+
+let fbis = enfile_bis 3 ([], []);;
+
+let fbis2 = enfile_bis 4 fbis;;
+
+let rec transfert : ('a list -> 'a list -> 'a list) = fun l1 l2 ->
+  match l1 with
+  | [] -> l2
+  | x :: l' -> transfert l' (x :: l2);;
+
+exception Impossible;;
+
+let rec defile_bis : ('a file_bis -> ('a * 'a file_bis)) = fun f ->
+  match f with
+  | ([], []) -> raise Impossible
+  | (_, []) -> let (lin, lout) = f in defile_bis ([], transfert lin lout)
+  | lin, x :: lout' -> (x, (lin, lout'));;
+
+defile_bis fbis;;
+
+defile_bis fbis2;;
+
+(* FILES À PRIORITÉ *)
+
+(* Exercice 62 *)
+
+type 'a fap = ('a * int) list;;
+
+let fap_vide = [];;
+
+let est_fap_vide : ('a fap -> bool) = fun f ->
+  match f with
+  | [] -> true
+  | _ -> false;;
+
+let fap1 = (2,2)::(3,1)::[];;
+
+exception Error;;
+
+let rec enleve_min = fun a l -> let (x, p) = a in
+                                    match l with
+                                    | [] -> []
+                                    | a::l' -> let (x', p') = a in if x' = x && p = p' then enleve_min a l' else a::(enleve_min a l');;
+
+
+let rec trouve_prio_min_bis = fun l a ->let (x, p) = a in match l with
+                                    | [] -> a
+                                    | fap::l' -> let (x', p') = fap in if p' < p then trouve_prio_min_bis l' fap else trouve_prio_min_bis l' a;;
+
+let trouve_prio_min = fun l -> match l with
+                          | [] -> raise Error
+                          | a::l' -> let min = trouve_prio_min_bis l a in
+                                    let p = enleve_min min l in (min, p);;
+
+let rec tri_selection = fun l -> match l with
+                                 | [] -> []
+                                 | _ -> let (min, s) = trouve_min l in min::(tri_selection s);;
+
+let rec insere : ('a -> int -> 'a fap -> 'a fap) = fun x p f ->
+  match f with
+  | [] -> [(x,p)] @ f
+  | e :: f' -> let (x', p') = e in
+               if p < p' then 
+
+insere 4 9 fap1;;
+
+let extrait : ('a fap -> ('a 
