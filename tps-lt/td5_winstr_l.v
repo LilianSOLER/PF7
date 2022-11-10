@@ -128,7 +128,16 @@ Fixpoint eqnatb n1 n2 : bool :=
     suffisamment de 0 (valeur par défaut).
  *)
 Fixpoint update (i:nat) (v:nat) (s:state) : state :=
-  match s 
+  match i with
+  |O => match s with
+        |[] => v::[]
+        |v'::s' =>v::s'
+        end
+  |S i' => match s with
+           |[] => 0::update i' v []
+           |v'::s' =>v':: update i' v s'
+           end
+  end.
 
 
 
@@ -147,7 +156,7 @@ Example S4 :=
   let s4 := update 2 3 s3 in
   update 0 5 s4.
 Example test_S4 : S4 = 5 :: 2 :: 3 :: 2 :: 1 :: [].
-Proof. Admitted. (*reflexivity. Qed.*)
+Proof. reflexivity. Qed. (*reflexivity. Qed.*)
 
 (** Peut s'écrire dans une premier temps avec update laissé "Admitted". *)
 Fixpoint evalI (i : instr) (s : state) : state :=
@@ -168,6 +177,10 @@ Fail Fixpoint evalW (i : winstr) (s : state) {struct i} : state :=
   (** à compléter, en expliquant le diagnostic rendu par Coq *)
   match i with
   | Skip       => s
+  |Assign x a => update x (evalA a s) s
+  |Seq i1 i2 => evalW i2 (evalW i1 s)
+  |If b i1 i2 => if evalB b s then evalW i1 s else evalW i2 s
+  |While b i => if evalB b s then evalW (While b i) (evalW i s) else s 
   end.
 
 (** ** Tests *)
