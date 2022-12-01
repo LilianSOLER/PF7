@@ -1,4 +1,5 @@
 (**********************  TD n°6  ***************************)
+(*Benjamin Bracquier et Lilian Soler*)
 (* Ce TD porte sur la sémantique naturelle codée en Coq    *)
 (* du petit langage impératif WHILE déjà vu précédemment.  *)
 (* On va l'utiliser pour faire des dérivations, montrer    *)
@@ -412,10 +413,20 @@ eapply SN_While_true.
 { cbv [corps_carre].
   eapply SN_Seq.
   + apply SN_Assign.
-  + cbn. 
-
-Admitted.
-
+  + cbn. eapply SN_Seq.
+ -apply SN_Assign.
+ -cbn. apply SN_Assign. }
+ cbn. eapply SN_While_true.
+{ cbn. reflexivity . }
+{ cbv [corps_carre].
+  eapply SN_Seq.
+ +apply SN_Assign.
+ +cbn. eapply SN_Seq .
+ - apply SN_Assign .
+ -cbn. apply SN_Assign. }
+ cbn. apply SN_While_false.
+cbn. reflexivity.
+Qed.  
 (** Énoncer et démontrer que Pcarre n permet de calculer le carré de n *)
 (* Complétez ici NIVEAU 4
    (pas de technique nouvelle, mais demande de la créativité *)
